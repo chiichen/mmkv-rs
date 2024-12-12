@@ -1,0 +1,7 @@
+[workspace]
+members = ["crates/mmkv-rs", "crates/mmkv-sys"]
+resolver = "2"
+
+[patch.crates-io]
+mmkv-rs = { path = "./crates/mmkv-rs" }
+mmkv-sys = { path = "./crates/mmkv-sys" }
