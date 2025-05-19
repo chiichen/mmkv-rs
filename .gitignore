@@ -3,3 +3,6 @@ target/
 #flake
 .direnv/
 .devenv/
+
+#Cargo
+Cargo.lock
