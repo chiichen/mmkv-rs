@@ -23,13 +23,8 @@ fn main() {
         .use_core()
         .clang_args(["-x", "c++"])
         .clang_arg("-std=c++17")
-        .layout_tests(false) //Layout tests are failed. Skip it for now
         // .parse_callbacks(Box::new(bindgen::CargoCallbacks::new()))
         // https://github.com/rust-lang/rust-bindgen/issues/2157
-        // .clang_arg("-stdlib=libc++")
-        // .no_copy("std\\_vector\\_\\_Temporary_value\\_\\_Storage")
-        // .manually_drop_union("std\\_vector\\_\\_Temporary_value\\_\\_Storage")
-        // .default_non_copy_union_style(bindgen::NonCopyUnionStyle::ManuallyDrop)
         .allowlist_type("MMKV")
         .opaque_type("MMKV")
         .opaque_type("^(std.*)$")
