@@ -171,48 +171,16 @@ impl MMKV {
         unsafe { bindings::MMKV_set(self.ptr, value, key_view) }
     }
 
-    pub fn set_i32(&mut self, key: &str, value: i32) -> bool {
-        let key_view = self.make_string_view(key);
-        unsafe { bindings::MMKV_set2(self.ptr, value, key_view) }
-    }
-
-    pub fn set_u32(&mut self, key: &str, value: u32) -> bool {
-        let key_view = self.make_string_view(key);
-        unsafe { bindings::MMKV_set4(self.ptr, value, key_view) }
-    }
-
-    pub fn set_i64(&mut self, key: &str, value: i64) -> bool {
-        let key_view = self.make_string_view(key);
-        unsafe { bindings::MMKV_set6(self.ptr, value, key_view) }
-    }
-
-    pub fn set_u64(&mut self, key: &str, value: u64) -> bool {
-        let key_view = self.make_string_view(key);
-        unsafe { bindings::MMKV_set8(self.ptr, value, key_view) }
-    }
-
-    pub fn set_f32(&mut self, key: &str, value: f32) -> bool {
-        let key_view = self.make_string_view(key);
-        unsafe { bindings::MMKV_set10(self.ptr, value, key_view) }
-    }
-
-    pub fn set_f64(&mut self, key: &str, value: f64) -> bool {
-        let key_view = self.make_string_view(key);
-        unsafe { bindings::MMKV_set12(self.ptr, value, key_view) }
-    }
-
-    pub fn set_str(&mut self, key: &str, value: &str) -> bool {
-        let key_view = self.make_string_view(key);
-        let c_value = CString::new(value).unwrap();
-        unsafe { bindings::MMKV_set14(self.ptr, c_value.as_ptr(), key_view) }
-    }
-
-    // Value getters
     pub fn get_bool(&mut self, key: &str, default: bool) -> (bool, bool) {
         let key_view = self.make_string_view(key);
         let mut has_value = false;
         let value = unsafe { bindings::MMKV_getBool(self.ptr, key_view, default, &mut has_value) };
         (value, has_value)
+    }
+
+    pub fn set_i32(&mut self, key: &str, value: i32) -> bool {
+        let key_view = self.make_string_view(key);
+        unsafe { bindings::MMKV_set2(self.ptr, value, key_view) }
     }
 
     pub fn get_i32(&mut self, key: &str, default: i32) -> (i32, bool) {
@@ -221,6 +189,86 @@ impl MMKV {
         let value = unsafe { bindings::MMKV_getInt32(self.ptr, key_view, default, &mut has_value) };
         (value, has_value)
     }
+
+    pub fn set_u32(&mut self, key: &str, value: u32) -> bool {
+        let key_view = self.make_string_view(key);
+        unsafe { bindings::MMKV_set4(self.ptr, value, key_view) }
+    }
+
+    pub fn get_u32(&mut self, key: &str, default: u32) -> (u32, bool) {
+        let key_view = self.make_string_view(key);
+        let mut has_value = false;
+        let value =
+            unsafe { bindings::MMKV_getUInt32(self.ptr, key_view, default, &mut has_value) };
+        (value, has_value)
+    }
+
+    pub fn set_i64(&mut self, key: &str, value: i64) -> bool {
+        let key_view = self.make_string_view(key);
+        unsafe { bindings::MMKV_set6(self.ptr, value, key_view) }
+    }
+
+    pub fn get_i64(&mut self, key: &str, default: i64) -> (i64, bool) {
+        let key_view = self.make_string_view(key);
+        let mut has_value = false;
+        let value = unsafe { bindings::MMKV_getInt64(self.ptr, key_view, default, &mut has_value) };
+        (value, has_value)
+    }
+
+    pub fn set_u64(&mut self, key: &str, value: u64) -> bool {
+        let key_view = self.make_string_view(key);
+        unsafe { bindings::MMKV_set8(self.ptr, value, key_view) }
+    }
+
+    pub fn get_u64(&mut self, key: &str, default: u64) -> (u64, bool) {
+        let key_view = self.make_string_view(key);
+        let mut has_value = false;
+        let value =
+            unsafe { bindings::MMKV_getUInt64(self.ptr, key_view, default, &mut has_value) };
+        (value, has_value)
+    }
+
+    pub fn set_f32(&mut self, key: &str, value: f32) -> bool {
+        let key_view = self.make_string_view(key);
+        unsafe { bindings::MMKV_set10(self.ptr, value, key_view) }
+    }
+
+    pub fn get_f32(&mut self, key: &str, default: f32) -> (f32, bool) {
+        let key_view = self.make_string_view(key);
+        let mut has_value = false;
+        let value = unsafe { bindings::MMKV_getFloat(self.ptr, key_view, default, &mut has_value) };
+        (value, has_value)
+    }
+
+    pub fn set_f64(&mut self, key: &str, value: f64) -> bool {
+        let key_view = self.make_string_view(key);
+        unsafe { bindings::MMKV_set12(self.ptr, value, key_view) }
+    }
+
+    pub fn get_f64(&mut self, key: &str, default: f64) -> (f64, bool) {
+        let key_view = self.make_string_view(key);
+        let mut has_value = false;
+        let value =
+            unsafe { bindings::MMKV_getDouble(self.ptr, key_view, default, &mut has_value) };
+        (value, has_value)
+    }
+
+    pub fn set_str(&mut self, key: &str, value: &str) -> bool {
+        let key_view = self.make_string_view(key);
+        let c_value = CString::new(value).unwrap();
+        unsafe { bindings::MMKV_set14(self.ptr, c_value.as_ptr(), key_view) }
+    }
+
+    // pub fn get_str(&mut self, key: &str, default: &str) -> (String, bool) {
+    //     let key_view = self.make_string_view(key);
+    //     let default = self.make_string_view(default);
+    //     let mut has_value = false;
+    //     let value =
+    //         unsafe { bindings::MMKV_getString(self.ptr, key_view, default, &mut has_value) };
+    //     (value, has_value)
+    // }
+
+    // Value getters
 
     // Other methods...
     pub fn contains_key(&mut self, key: &str) -> bool {
