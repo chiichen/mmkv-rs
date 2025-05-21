@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches: ["master"]
+  pull_request:
+    branches: ["master"]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  ci:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Install Rust nightly
+        run: rustup update nightly
+      - uses: Swatinem/rust-cache@v2
+      - name: Build
+        run: cargo build --verbose
+      - name: Test
+        run: cargo test --verbose
+      - name: Clippy
+        run: cargo clippy -- -D warnings
+      - name: Cargo Fmt Check
+        run: cargo fmt --all -- --check
