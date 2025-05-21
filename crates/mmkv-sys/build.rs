@@ -12,6 +12,17 @@ fn main() {
 
     // Tell cargo where to find the built library
     println!("cargo:rustc-link-search=native={}", dst.display());
+
+    #[cfg(feature = "bindgen")]
+    bindgen();
+
+    #[cfg(feature = "autocxx")]
+    autocxx();
+}
+
+#[cfg(feature = "bindgen")]
+fn bindgen() {
+    let mmkv_core = PathBuf::from("MMKV/Core");
     let mmkv_core_include = mmkv_core.join("include/MMKV");
     // Generate bindings
     let bindings = bindgen::Builder::default()
@@ -37,4 +48,17 @@ fn main() {
     bindings
         .write_to_file(out_path.join("bindings.rs"))
         .expect("Couldn't write bindings!");
+}
+
+#[cfg(feature = "autocxx")]
+fn autocxx() {
+    let include_path = std::path::PathBuf::from("MMKV/Core/include/MMKV");
+
+    // This assumes all your C++ bindings are in main.rs
+    let string_view_path = std::path::PathBuf::from("include");
+    let mut b = autocxx_build::Builder::new("src/autocxx.rs", &[&include_path, &string_view_path])
+        .extra_clang_args(&["-std=c++17"])
+        .build()
+        .unwrap();
+    b.flag_if_supported("-std=c++17").compile("mmkv"); // arbitrary library name, pick anything
 }
